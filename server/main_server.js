@@ -1,5 +1,6 @@
 if (Meteor.isServer) {
   Meteor.startup(function () {
+    
     // for sat: #occupyboston
     var hashtag = "occupy";
 
