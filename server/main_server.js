@@ -47,6 +47,12 @@ if (Meteor.isServer) {
     // ******  uncomment to turn the stream on: ****** //
    // stream.on('tweet', handleStream);
 
+   //**** hashtags **/
+   Meteor.call("addHashtag", 40.81, -73.96, "columbia");
+   Meteor.call("addHashtag", 40.84, -73.91, "bronx");
+   Meteor.call("addHashtag", 40.83, -73.91, "bronxish");
+
+
   }); // end onstartup
 
   Meteor.publish("tweets", function () {

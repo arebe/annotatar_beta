@@ -1,41 +1,51 @@
-  Meteor.startup(function(){
-    var ar = $('#ar'),
-    canvas = $('canvas', ar)[0],
-    context = canvas.getContext('2d'),
-    video = $('video', ar)[0],
-    navLat, navLong, accurate,
-    hashtag;
+Template.mainAR.onRendered(function(){
 
-    console.log("video w: ", video.width, " video h: ", video.height);
-    console.log("window w: ", $(window).width())
-    context.canvas.width = $(window).width();
-    context.canvas.height = $(window).height();
-    context.font = "20px serif";
-    context.fillStyle = "#3264FF";
+  var offset = {
+    lastTime: 0,
+    time: 0,
+    velX: 0.0,
+    velY: 0.0,
+    x: 0.0,
+    y: 0.0,
+  };
 
-    try {
-      if ("geolocation" in navigator){
-        navigator.geolocation.getCurrentPosition(function(position){
-          accurate = (position.coords.accuracy <= 100) ? true : false;
-          navLat = position.coords.latitude;
-          navLong = position.coords.longitude;
-          $("#dynamsg").append('<p>latitude: '+navLat+' longitude: '+navLong+' accuracy: <span id="acc">'+position.coords.accuracy+'</span></p>');
-          console.log("lat: ", navLat, " long: ", navLong, " accuracy: ", position.coords.accuracy);
-          accurate ? $("#acc").css("color", "#2d7317") : $("#acc").css("color", "#73172d");
-        });
-      }
-      else{
-        navLat = 0;
-        navLong = 0;
-      }
-    } catch(err){
-      console.log("geolocation error: ", err);
-      $("#dynamsg").append("<p>geolocation error: ", err,"</p>");
+  var ar = $('#ar'),
+  canvas = $('canvas', ar)[0],
+  context = canvas.getContext('2d'),
+  video = $('video', ar)[0],
+  navLat, navLong, accurate,
+  hashtag;
+
+  console.log("video w: ", video.width, " video h: ", video.height);
+  console.log("window w: ", $(window).width())
+  context.canvas.width = $(window).width();
+  context.canvas.height = $(window).height();
+  context.font = "20px serif";
+  context.fillStyle = "#3264FF";
+
+  try {
+    if ("geolocation" in navigator){
+      navigator.geolocation.getCurrentPosition(function(position){
+        accurate = (position.coords.accuracy <= 100) ? true : false;
+        navLat = position.coords.latitude;
+        navLong = position.coords.longitude;
+        $("#dynamsg").append('<p>latitude: '+navLat+' longitude: '+navLong+' accuracy: <span id="acc">'+position.coords.accuracy+'</span></p>');
+        console.log("lat: ", navLat, " long: ", navLong, " accuracy: ", position.coords.accuracy);
+        accurate ? $("#acc").css("color", "#2d7317") : $("#acc").css("color", "#73172d");
+      });
     }
+    else{
+      navLat = 0;
+      navLong = 0;
+    }
+  } catch(err){
+    console.log("geolocation error: ", err);
+    $("#dynamsg").append("<p>geolocation error: ", err,"</p>");
+  }
 
-    try{
-      navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
-      window.URL = window.URL || window.mozURL || window.webkitURL;
+  try{
+    navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
+    window.URL = window.URL || window.mozURL || window.webkitURL;
 
       // note ab resolution: http://stackoverflow.com/questions/27420581/get-maximum-video-resolution-with-getusermedia
       navigator.getUserMedia({'video': {
@@ -81,7 +91,7 @@
         w = $(window).width();
         h = video.height * ($(window).width()/video.width);
       }
-      var img = context.drawImage(video, x, y, w, h);
+      var img = context.drawImage(video, x, y, w, h, 0, 0, $(window).width(), $(window).height());
       renderTweets();
       //("geolocation" in navigator) ? renderTweets() : renderNoTweets("Please enable geolocation for full AR experience!");
     }, 100);
@@ -112,4 +122,21 @@
       });
 
     };
-});
+
+  $("#downloadBtn").click(function(event) {
+    var filename = 'annotatar_data.csv';
+    Meteor.call('download', function(err, fileContent) {
+      if(fileContent){
+        var blob = new Blob([fileContent], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, filename);
+      }
+    })
+  });
+
+  $("#captureBtn").click(function(e){
+    var url = canvas.toDataURL('png');
+    $("#captureLink").attr('href', url).click();
+     
+  });
+
+}); // end template.mainar.onrendered
