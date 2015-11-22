@@ -1,8 +1,16 @@
 if (Meteor.isServer) {
   Meteor.startup(function () {
 
+   //**** hashtags **/
+   Meteor.call("addHashtag", 40.81, -73.96, "columbia");
+   Meteor.call("addHashtag", 40.84, -73.91, "bronx");
+   Meteor.call("addHashtag", 40.83, -73.91, "bronxish");
+   Meteor.call("addHashtag", 40.80, -73.96, "pitaplace");
+   Meteor.call("addHashtag", 40.81, -73.95, "ambassades");
+   Meteor.call("addHashtag", 40.73, -74, "dumpling");
+
     // for sat: #occupyboston
-    var hashtags = ["occupy", "columbia", "ambassades"];
+    var hashtags = ["occupy", "bronx", "columbia", "ambassades", "dumpling"];
 
     Twit = new TwitMaker({
       consumer_key:         Meteor.settings.twitter.consumer_key
@@ -50,12 +58,6 @@ if (Meteor.isServer) {
     // ******  uncomment to turn the stream on: ****** //
    // stream.on('tweet', handleStream);
 
-   //**** hashtags **/
-   Meteor.call("addHashtag", 40.81, -73.96, "columbia");
-   Meteor.call("addHashtag", 40.84, -73.91, "bronx");
-   Meteor.call("addHashtag", 40.83, -73.91, "bronxish");
-   Meteor.call("addHashtag", 40.80, -73.96, "pitaplace");
-   Meteor.call("addHashtag", 40.81, -73.95, "ambassades");
 
 
 
@@ -79,6 +81,10 @@ if (Meteor.isServer) {
 
   Meteor.publish("occupy", function(){
     return Tweets.find({hashtag: "occupy"});
+  })
+
+  Meteor.publish("dumpling", function(){
+    return Tweets.find({hashtag: "dumpling"});
   })
 
   Houston.methods("Tweets", {
