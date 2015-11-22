@@ -1,7 +1,7 @@
 if (Meteor.isClient) {
   // This code only runs on the client
 
-  Meteor.subscribe("tweets");
+//  Meteor.subscribe("tweets");
   Meteor.subscribe("hashtags");
 
 
@@ -32,6 +32,8 @@ if (Meteor.isClient) {
           Meteor.call("findHashtag", navLat, navLon, function(err, result){
             hashtag = result;
             console.log("result: ", hashtag);
+            Session.set("Hashtag", hashtag);
+            Meteor.subscribe(hashtag);
           });
           console.log('hashtagofthemoment: ', hashtag);
 

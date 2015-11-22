@@ -1,8 +1,8 @@
 if (Meteor.isServer) {
   Meteor.startup(function () {
-    
+
     // for sat: #occupyboston
-    var hashtag = "occupy";
+    var hashtags = ["occupy", "columbia", "ambassades"];
 
     Twit = new TwitMaker({
       consumer_key:         Meteor.settings.twitter.consumer_key
@@ -25,23 +25,26 @@ if (Meteor.isServer) {
 
     //**************************************************//
     // ******  uncomment to turn the rest on: ****** //
-    Twit.get('search/tweets',
-     {
+    hashtags.map(function(hashtag){
+      Twit.get('search/tweets',
+      {
        q: hashtag,
        count: 20
      }, handleTweets);
 
-   //*** Stream
+    })
+    
+   //*** Stream --- old version (rewrite for multiple hashtags)
 
-    var handleStream = Meteor.bindEnvironment(function(tweet, err){
-      console.log("***********************", err, "***********************");
-      console.log("+++++++++++++++++++++++",tweet,"+++++++++++++++++++++++");
+   var handleStream = Meteor.bindEnvironment(function(tweet, err){
+    console.log("***********************", err, "***********************");
+    console.log("+++++++++++++++++++++++",tweet,"+++++++++++++++++++++++");
       // tweet.text.stripURL().stripUsername().stripHashtag();
       Meteor.call("addTweet", tweet.text, hashtag);
     });
 
 
-    var stream = Twit.stream('statuses/filter', { track: "#"+hashtag });
+   // var stream = Twit.stream('statuses/filter', { track: "#"+hashtag });
 
     //**************************************************//
     // ******  uncomment to turn the stream on: ****** //
@@ -65,6 +68,18 @@ if (Meteor.isServer) {
   Meteor.publish("hashtags", function () {
     return Hashtags.find();
   });
+
+  Meteor.publish("columbia", function(){
+    return Tweets.find({hashtag: "columbia"});
+  })
+
+  Meteor.publish("ambassades", function(){
+    return Tweets.find({hashtag: "ambassades"});
+  })
+
+  Meteor.publish("occupy", function(){
+    return Tweets.find({hashtag: "occupy"});
+  })
 
   Houston.methods("Tweets", {
     "Download": function(e){
