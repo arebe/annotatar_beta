@@ -21,27 +21,6 @@ Template.mainAR.onRendered(function(){
   context.canvas.width = $(window).width();
   context.canvas.height = $(window).height();
   context.font = "20px serif";
-  context.fillStyle = "#3264FF";
-
-  try {
-    if ("geolocation" in navigator){
-      navigator.geolocation.getCurrentPosition(function(position){
-        accurate = (position.coords.accuracy <= 100) ? true : false;
-        navLat = position.coords.latitude;
-        navLong = position.coords.longitude;
-        $("#dynamsg").append('<p>latitude: '+navLat+' longitude: '+navLong+' accuracy: <span id="acc">'+position.coords.accuracy+'</span></p>');
-        console.log("lat: ", navLat, " long: ", navLong, " accuracy: ", position.coords.accuracy);
-        accurate ? $("#acc").css("color", "#2d7317") : $("#acc").css("color", "#73172d");
-      });
-    }
-    else{
-      navLat = 0;
-      navLong = 0;
-    }
-  } catch(err){
-    console.log("geolocation error: ", err);
-    $("#dynamsg").append("<p>geolocation error: ", err,"</p>");
-  }
 
   try{
     navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
