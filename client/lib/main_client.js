@@ -2,64 +2,70 @@ if (Meteor.isClient) {
   // This code only runs on the client
 
 //  Meteor.subscribe("tweets");
-  Meteor.subscribe("hashtags");
+Meteor.subscribe("hashtags");
 
 
 
-  Template.body.helpers({
-    tweets: function(){
-      return Tweets.find({}, {sort: {createdAt: -1}});
-    }
-  });
+Template.body.helpers({
+  tweets: function(){
+    return Tweets.find({}, {sort: {createdAt: -1}});
+  }
+});
 
-  Template.mainAR.helpers({
-    startAR: function(){
-      console.log("startAR!");
+Template.mainAR.helpers({
+  startAR: function(){
+    console.log("startAR!");
     }, // end startAR
   }); // end mainAR helpers
 
-  Meteor.startup(function(){
-    var navLat, navLon, hashtag;
+Meteor.startup(function(){
+  var navLat, navLon, hashtag;
 
-    try {
-      if ("geolocation" in navigator){
-        navigator.geolocation.getCurrentPosition(function(position){
-          navLat = position.coords.latitude;
-          navLon = position.coords.longitude;
-          navLat = Math.round(100*navLat)/100;
-          navLon = Math.round(100*navLon)/100;
-          console.log("lat: ", navLat, " long: ", navLon, " accuracy: ", position.coords.accuracy);
-          Meteor.call("findHashtag", navLat, navLon, function(err, result){
+  try {
+    if ("geolocation" in navigator){
+      navigator.geolocation.getCurrentPosition(function(position){
+        navLat = position.coords.latitude;
+        navLon = position.coords.longitude;
+        navLat = Math.round(100*navLat)/100;
+        navLon = Math.round(100*navLon)/100;
+        console.log("lat: ", navLat, " long: ", navLon, " accuracy: ", position.coords.accuracy);
+        Meteor.call("findHashtag", navLat, navLon, function(err, result){
+          if(result){
             hashtag = result;
-            console.log("result: ", hashtag);
+            console.log("subscribing to: ", hashtag);
             Session.set("Hashtag", hashtag);
             Meteor.subscribe(hashtag);
-          });
-          console.log('hashtagofthemoment: ', hashtag);
-
+          }
+          else{
+            console.log("no hashtag found! subscribing to #occupy");
+            Meteor.subscribe("occupy");
+          }
         });
-      }
-      else{
-        navLat = 0;
-        navLon = 0;
-      }
-    } catch(err){
-      console.log("geolocation error: ", err);
-    }
+        console.log('hashtagofthemoment: ', hashtag);
 
-    var renderNoTweets = function(message){
-      for(var i = 0; i < 30; i++){
-        context.fillStyle("#f11");
-        context.fillText(message, 10, (10*i));
-      }
+      });
     }
+    else{
+      navLat = 0;
+      navLon = 0;
+    }
+  } catch(err){
+    console.log("geolocation error: ", err);
+  }
 
- 
+  var renderNoTweets = function(message){
+    for(var i = 0; i < 30; i++){
+      context.fillStyle("#f11");
+      context.fillText(message, 10, (10*i));
+    }
+  }
+
+
 
 
   });  // end onstartup
 
-window.ondevicemotion = function(e){
+  window.ondevicemotion = function(e){
   // var now = Date.now();
   // offset.time = now - offset.lastTime;
   // offset.lastTime = now;
@@ -83,7 +89,7 @@ window.ondevicemotion = function(e){
   // offset.velX = 0;
   // offset.velY = 0;
 
-  }
+}
 } // end if meteor.isClient
 
 

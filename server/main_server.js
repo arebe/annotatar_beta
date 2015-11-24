@@ -11,6 +11,7 @@ if (Meteor.isServer) {
 
     // for sat: #occupyboston
     var hashtags = ["occupy", "bronx", "columbia", "ambassades", "dumpling"];
+    var hashtag = "";
 
     Twit = new TwitMaker({
       consumer_key:         Meteor.settings.twitter.consumer_key
@@ -33,7 +34,8 @@ if (Meteor.isServer) {
 
     //**************************************************//
     // ******  uncomment to turn the rest on: ****** //
-    hashtags.map(function(hashtag){
+    hashtags.map(function(h){
+      hashtag = h;
       Twit.get('search/tweets',
       {
        q: hashtag,
@@ -47,7 +49,6 @@ if (Meteor.isServer) {
    var handleStream = Meteor.bindEnvironment(function(tweet, err){
     console.log("***********************", err, "***********************");
     console.log("+++++++++++++++++++++++",tweet,"+++++++++++++++++++++++");
-      // tweet.text.stripURL().stripUsername().stripHashtag();
       Meteor.call("addTweet", tweet.text, hashtag);
     });
 
