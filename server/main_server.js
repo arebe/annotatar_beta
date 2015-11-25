@@ -28,7 +28,6 @@ if (Meteor.isServer) {
       for(var i = 0; i < data.statuses.length; i++){
         Meteor.call("addTweet", data.statuses[i].text, data.search_metadata.query, data.statuses[i].created_at);
       }
-      
     });
 
 
@@ -36,7 +35,6 @@ if (Meteor.isServer) {
     // ******  uncomment to turn the rest on: ****** //
     hashtags.map(function(h){
       hashtag = h;
-      console.log("hashtags.map hashtag: ", hashtag);
       Twit.get('search/tweets',
       {
        q: hashtag,
@@ -59,8 +57,6 @@ if (Meteor.isServer) {
     //**************************************************//
     // ******  uncomment to turn the stream on: ****** //
    // stream.on('tweet', handleStream);
-
-
 
 
   }); // end onstartup

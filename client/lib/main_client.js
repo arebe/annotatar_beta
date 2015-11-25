@@ -32,11 +32,11 @@ Meteor.startup(function(){
             hashtag = result;
             console.log("subscribing to: ", hashtag);
             //Session.set("Hashtag", hashtag);
-            //Meteor.subscribe("tweets");
+            Meteor.subscribe(hashtag);
           }
           else{
             console.log("no hashtag found! subscribing to #occupy");
-            Meteor.subscribe("tweets");
+            Meteor.subscribe("occupy");
           }
         });
         console.log('hashtagofthemoment: ', hashtag);
