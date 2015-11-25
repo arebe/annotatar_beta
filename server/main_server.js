@@ -8,9 +8,10 @@ if (Meteor.isServer) {
    Meteor.call("addHashtag", 40.80, -73.96, "pitaplace");
    Meteor.call("addHashtag", 40.81, -73.95, "ambassades");
    Meteor.call("addHashtag", 40.73, -74, "dumpling");
+   Meteor.call("addHashtag", 40.74, -74, "meow");
 
     // for sat: #occupyboston
-    var hashtags = ["occupy", "bronx", "columbia", "ambassades", "dumpling"];
+    var hashtags = ["occupy", "bronx", "columbia", "ambassades", "dumpling", "meow"];
     var hashtag = "";
 
     Twit = new TwitMaker({
@@ -83,6 +84,10 @@ if (Meteor.isServer) {
 
   Meteor.publish("dumpling", function(){
     return Tweets.find({hashtag: "dumpling"});
+  })
+
+  Meteor.publish("meow", function(){
+    return Tweets.find({hashtag: "meow"});
   })
 
   Houston.methods("Tweets", {
