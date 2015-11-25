@@ -26,7 +26,7 @@ if (Meteor.isServer) {
       console.log(data);
       console.log("***********************", err, "***********************");
       for(var i = 0; i < data.statuses.length; i++){
-        Meteor.call("addTweet", data.statuses[i].text, hashtag, data.statuses[i].created_at);
+        Meteor.call("addTweet", data.statuses[i].text, data.search_metadata.query, data.statuses[i].created_at);
       }
       
     });
@@ -36,6 +36,7 @@ if (Meteor.isServer) {
     // ******  uncomment to turn the rest on: ****** //
     hashtags.map(function(h){
       hashtag = h;
+      console.log("hashtags.map hashtag: ", hashtag);
       Twit.get('search/tweets',
       {
        q: hashtag,

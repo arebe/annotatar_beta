@@ -1,10 +1,8 @@
 if (Meteor.isClient) {
   // This code only runs on the client
 
-//  Meteor.subscribe("tweets");
+//Meteor.subscribe("tweets");
 Meteor.subscribe("hashtags");
-
-
 
 Template.body.helpers({
   tweets: function(){
@@ -33,12 +31,12 @@ Meteor.startup(function(){
           if(result){
             hashtag = result;
             console.log("subscribing to: ", hashtag);
-            Session.set("Hashtag", hashtag);
-            Meteor.subscribe(hashtag);
+            //Session.set("Hashtag", hashtag);
+            //Meteor.subscribe("tweets");
           }
           else{
             console.log("no hashtag found! subscribing to #occupy");
-            Meteor.subscribe("occupy");
+            Meteor.subscribe("tweets");
           }
         });
         console.log('hashtagofthemoment: ', hashtag);

@@ -87,7 +87,7 @@ Template.mainAR.onRendered(function(){
         // 3600000 ms == 1 hr
         // 1200000 ms = 20min
         // 60000 ms = 1min
-        var ageMax = (1200000),
+        var ageMax = (3600000),
         fsizeMax = 50,
         fsizeMin = 0;
         if (age > ageMax){ age = ageMax };
