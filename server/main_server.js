@@ -1,5 +1,10 @@
 if (Meteor.isServer) {
+
+  var hashtags = ["occupy"];
+
   Meteor.startup(function () {
+
+    Hashtags.remove({});
 
    //**** hashtags **/
    Meteor.call("addHashtag", 40.81, -73.96, "columbia");
@@ -10,17 +15,21 @@ if (Meteor.isServer) {
    Meteor.call("addHashtag", 40.73, -74, "dumpling");
    Meteor.call("addHashtag", 40.74, -74, "meow");
    Meteor.call("addHashtag", 42.37, -71.12, "harvard");
+   Meteor.call("addHashtag", 38.91, -77.02, "whatever");
 
-    // for sat: #occupyboston
-    var hashtags = ["occupy", "bronx", "columbia", "ambassades", "dumpling", "meow", "harvard"];
-    var hashtag = "";
+   var hashtagsCursor = Hashtags.find();
+   hashtagsCursor.map(function(h){
+    console.log("pushing: ", h.hashtag);
+    hashtags.push(h.hashtag); 
+  })
 
-    Twit = new TwitMaker({
-      consumer_key:         Meteor.settings.twitter.consumer_key
-      , consumer_secret:      Meteor.settings.twitter.consumer_secret
-      , access_token:         Meteor.settings.twitter.access_token
-      , access_token_secret:  Meteor.settings.twitter.access_token_secret
-    });
+
+   Twit = new TwitMaker({
+    consumer_key:         Meteor.settings.twitter.consumer_key
+    , consumer_secret:      Meteor.settings.twitter.consumer_secret
+    , access_token:         Meteor.settings.twitter.access_token
+    , access_token_secret:  Meteor.settings.twitter.access_token_secret
+  });
 
     //*** REST
 
@@ -39,19 +48,19 @@ if (Meteor.isServer) {
       hashtag = h;
       Twit.get('search/tweets',
       {
-       q: hashtag,
+       q: h,
        count: 20
      }, handleTweets);
 
     })
-    
+
    //*** Stream --- old version (rewrite for multiple hashtags)
 
    var handleStream = Meteor.bindEnvironment(function(tweet, err){
     console.log("***********************", err, "***********************");
     console.log("+++++++++++++++++++++++",tweet,"+++++++++++++++++++++++");
-      Meteor.call("addTweet", tweet.text, hashtag);
-    });
+    Meteor.call("addTweet", tweet.text, hashtag);
+  });
 
 
    // var stream = Twit.stream('statuses/filter', { track: "#"+hashtag });
@@ -63,41 +72,14 @@ if (Meteor.isServer) {
 
   }); // end onstartup
 
-  Meteor.publish("tweets", function () {
-    return Tweets.find();
+  Meteor.publish("tweets", function (hashtag) {
+    return Tweets.find({hashtag: hashtag});
   });
 
   Meteor.publish("hashtags", function () {
     return Hashtags.find();
   });
 
-  Meteor.publish("columbia", function(){
-    return Tweets.find({hashtag: "columbia"});
-  })
-
-  Meteor.publish("ambassades", function(){
-    return Tweets.find({hashtag: "ambassades"});
-  })
-
-  Meteor.publish("occupy", function(){
-    return Tweets.find({hashtag: "occupy"});
-  })
-
-  Meteor.publish("dumpling", function(){
-    return Tweets.find({hashtag: "dumpling"});
-  })
-
-  Meteor.publish("meow", function(){
-    return Tweets.find({hashtag: "meow"});
-  })
-
-  Meteor.publish("harvard", function(){
-    return Tweets.find({hashtag: "harvard"});
-  })
-
-  Meteor.publish("bronx", function(){
-    return Tweets.find({hashtag: "bronx"});
-  })
 
   Houston.methods("Tweets", {
     "Download": function(e){
