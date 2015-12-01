@@ -95,6 +95,10 @@ if (Meteor.isServer) {
     return Tweets.find({hashtag: "harvard"});
   })
 
+  Meteor.publish("bronx", function(){
+    return Tweets.find({hashtag: "bronx"});
+  })
+
   Houston.methods("Tweets", {
     "Download": function(e){
       var nameFile = 'fileDownloaded.csv';
