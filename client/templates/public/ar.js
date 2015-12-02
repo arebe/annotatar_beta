@@ -104,7 +104,7 @@ Template.mainAR.onRendered(function(){
         sw = video.width * scale.y;
         sh = video.height * scale.y;
         // slice extra x
-        sx = (sw - $(window).width()) / 2;
+        sx = (sxw - $(window).width()) / 2;
         sy = 0;
       }
       else{
