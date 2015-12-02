@@ -27,11 +27,11 @@ Meteor.startup(function(){
         navLat = Math.round(100*navLat)/100;
         navLon = Math.round(100*navLon)/100;
         console.log("lat: ", navLat, " long: ", navLon, " accuracy: ", position.coords.accuracy);
+        $("#dynamsg").append('<p>latitude: '+navLat+' longitude: '+navLon+' accuracy: <span id="acc">'+position.coords.accuracy+'</span></p>');
         Meteor.call("findHashtag", navLat, navLon, function(err, result){
           if(result){
             hashtag = result;
             console.log("subscribing to: ", hashtag);
-            //Session.set("Hashtag", hashtag);
             Meteor.subscribe("tweets", hashtag);
           }
           else{
