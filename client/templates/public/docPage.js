@@ -9,10 +9,10 @@ function initMap(){
 
     var mapOptions = {
         center: {
-            lat: 39,
-            lng: -99
+            lat: 40,
+            lng: -74
         },
-        zoom: 5,
+        zoom: 8,
 
         // disables scroll-initiated zooming
         scrollwheel: true,
@@ -44,8 +44,14 @@ function initMap(){
     map.setOptions({
     	styles: styles
     });
+// var map = new google.maps.Map(document.getElementById('map'), {
+//     center: {lat: 40, lng: -74},
+//     scrollwheel: false,
+//     zoom: 5
+//   });
 
-    var icon = 'https://s3.amazonaws.com/kpomes/media/map-marker1.png';
+
+    // var icon = 'https://s3.amazonaws.com/kpomes/media/map-marker1.png';
     var markers = [];
     // items added to this list will be added to the navigation map at the top of the site
     var hashtagsCursor = Hashtags.find();
@@ -87,13 +93,13 @@ function initMap(){
     // });
 
     // turns each map marker into a link
-    for (var i = 0; i < markers.length; i++) {
-    	google.maps.event.addListener(markers[i], 'click', function() {
-    		window.location.href = this.url;
-    	});
-    }
+    // for (var i = 0; i < markers.length; i++) {
+    // 	google.maps.event.addListener(markers[i], 'click', function() {
+    // 		window.location.href = this.url;
+    // 	});
+    // }
 
-//google.maps.event.addDomListener(window, 'load', initialize);
+// google.maps.event.addDomListener(window, 'load', initMap);
 
 
 } // end initMap

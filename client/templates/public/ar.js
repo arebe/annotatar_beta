@@ -161,7 +161,7 @@ var renderTweets = function(){
         alphaMax = 1.0;
         alphaMin = 0;
         var alpha = (((alphaMin-alphaMax)*age)/ageMax)+alphaMax;
-        context.font = fsize+'px "Amatic SC"';
+        context.font = fsize+'px "Walter Turncoat"';
         context.fillStyle = 'rgba('+data.color.r+','+data.color.g+','+ data.color.b+','+ alpha+')';
         context.fillText(data.text, data.xPos+offset.x, data.yPos+offset.y);
       });
