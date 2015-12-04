@@ -51,7 +51,7 @@ function initMap(){
 //   });
 
 
-    // var icon = 'https://s3.amazonaws.com/kpomes/media/map-marker1.png';
+    var icon = 'tweet_marker.png';
     var markers = [];
     // items added to this list will be added to the navigation map at the top of the site
     var hashtagsCursor = Hashtags.find();
@@ -60,6 +60,7 @@ function initMap(){
     	markers.push(new google.maps.Marker({
     		position: new google.maps.LatLng(h.lat, h.lon),
     		map: map,
+            icon: icon,
     		title: h.hashtag
     	}));
     })
