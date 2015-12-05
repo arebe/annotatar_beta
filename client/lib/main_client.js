@@ -2,7 +2,7 @@ if (Meteor.isClient) {
   // This code only runs on the client
 
 //Meteor.subscribe("tweets");
-Meteor.subscribe("hashtags");
+  Meteor.subscribe("hashtags", initMap());
 
 Template.body.helpers({
   tweets: function(){
@@ -16,7 +16,45 @@ Template.mainAR.helpers({
     }, // end startAR
   }); // end mainAR helpers
 
+function initMap(){
+  GoogleMaps.init(
+    {
+        'language': 'en' //optional
+    }, 
+    function(){
+        var mapOptions = {
+            zoom: 3,
+            mapTypeId: google.maps.MapTypeId.HYBRID,
+            scrollwheel: false,
+            panControl: true,
+            zoomControl: true,
+            scaleControl: false,
+            streetViewControl: false,
+            overviewMapControl: false,
+        };
+        map = new google.maps.Map(document.getElementById("map"), mapOptions); 
+        map.setCenter(new google.maps.LatLng( 30, -74 ));
+            var icon = 'tweet_marker.png';
+    var markers = [];
+    console.log("initMap hashtags count: ", Hashtags.find().count());
+    var hashtagsCursor = Hashtags.find();
+    hashtagsCursor.map(function(h){
+        console.log("adding marker for: ", h.lat, " ", h.lon, " ", h.hashtag);
+        markers.push(new google.maps.Marker({
+            position: new google.maps.LatLng(h.lat, h.lon),
+            map: map,
+            icon: icon,
+            title: h.hashtag
+         }));
+    })
+  }) // end GoogleMaps.init
+}
+
 Meteor.startup(function(){
+  
+
+
+
   var navLat, navLon, hashtag;
 
   try {
