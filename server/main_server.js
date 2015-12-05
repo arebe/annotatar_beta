@@ -80,6 +80,7 @@ if (Meteor.isServer) {
 
   Meteor.publish("hashtags", function () {
     return Hashtags.find();
+    return this.ready();
   });
 
 
