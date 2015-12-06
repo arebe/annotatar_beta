@@ -2,7 +2,7 @@ if (Meteor.isClient) {
   // This code only runs on the client
 
 //Meteor.subscribe("tweets");
-  Meteor.subscribe("hashtags", initMap());
+  Meteor.subscribe("hashtags");
 
 Template.body.helpers({
   tweets: function(){
@@ -16,44 +16,9 @@ Template.mainAR.helpers({
     }, // end startAR
   }); // end mainAR helpers
 
-function initMap(){
-  GoogleMaps.init(
-    {
-        'language': 'en' //optional
-    }, 
-    function(){
-        var mapOptions = {
-            zoom: 3,
-            mapTypeId: google.maps.MapTypeId.HYBRID,
-            scrollwheel: false,
-            panControl: true,
-            zoomControl: true,
-            scaleControl: false,
-            streetViewControl: false,
-            overviewMapControl: false,
-        };
-        map = new google.maps.Map(document.getElementById("map"), mapOptions); 
-        map.setCenter(new google.maps.LatLng( 30, -74 ));
-            var icon = 'tweet_marker.png';
-    var markers = [];
-    console.log("initMap hashtags count: ", Hashtags.find().count());
-    var hashtagsCursor = Hashtags.find();
-    hashtagsCursor.map(function(h){
-        console.log("adding marker for: ", h.lat, " ", h.lon, " ", h.hashtag);
-        markers.push(new google.maps.Marker({
-            position: new google.maps.LatLng(h.lat, h.lon),
-            map: map,
-            icon: icon,
-            title: h.hashtag
-         }));
-    })
-  }) // end GoogleMaps.init
-}
 
 Meteor.startup(function(){
-  
-
-
+  GoogleMaps.load();  
 
   var navLat, navLon, hashtag;
 
@@ -96,9 +61,6 @@ Meteor.startup(function(){
     }
   }
 
-
-
-
   });  // end onstartup
 
   window.ondevicemotion = function(e){
@@ -126,6 +88,47 @@ Meteor.startup(function(){
   // offset.velY = 0;
 
 }
+
+  Template.map.onCreated(function() {
+    var self = this;
+
+    GoogleMaps.ready('map', function(map) {
+        var icon = 'tweet_marker.png';
+        var markers = [];
+        console.log("initMap hashtags count: ", Hashtags.find().count());
+        self.autorun(function(){
+          var hashtagsCursor = Hashtags.find();
+          hashtagsCursor.map(function(h){
+              console.log("adding marker for: ", h.lat, " ", h.lon, " ", h.hashtag);
+              var marker = new google.maps.Marker({
+                  position: new google.maps.LatLng(h.lat, h.lon),
+                  map: map.instance,
+                  icon: icon,
+                  title: h.hashtag,
+                  description: "whatever stuff"
+               });
+              marker.addListener("click", function(){
+                console.log("you clicked on:", marker.description, "about", marker.title);
+              });
+              markers.push(marker);
+          });
+        }); // end self.autorun
+    }); // end GoogleMaps.ready
+  }); // end Template.map.onCreated
+
+  Template.map.helpers({
+    mapOptions: function() {
+      // Initialize the map once we have the latLng.
+      if (GoogleMaps.loaded()) {
+        return {
+          mapTypeId: google.maps.MapTypeId.TERRAIN,
+          center: new google.maps.LatLng( 40, -74 ),
+          zoom: 7
+        };
+      }
+    }
+  }); // end Template.map.helpers
+
 } // end if meteor.isClient
 
 

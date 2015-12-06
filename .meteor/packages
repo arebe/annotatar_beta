@@ -23,4 +23,4 @@ ejson
 iron:router
 twbs:bootstrap
 houston:admin
-googlemaps
+dburles:google-maps
