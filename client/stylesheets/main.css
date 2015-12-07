@@ -138,11 +138,9 @@ video {
 }
 
 #map {
-    height: 900px;
+    height: 800px;
     width: 100%;
-    margin: 0;
+    margin-bottom: 10px;
     padding: 0;
-
-    /*places title over map canvas*/
     position: relative;
 }

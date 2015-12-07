@@ -10,7 +10,7 @@ if (Meteor.isServer) {
    //**** hashtags **/
    Meteor.call("addHashtag", 40.81, -73.96, "columbia");
    Meteor.call("addHashtag", 40.84, -73.91, "bronx");
-   Meteor.call("addHashtag", 40.83, -73.91, "bronxish");
+   Meteor.call("addHashtag", 40.83, -73.91, "cats");
    Meteor.call("addHashtag", 40.80, -73.96, "pastry");
    Meteor.call("addHashtag", 40.81, -73.95, "ambassades");
    Meteor.call("addHashtag", 40.73, -74, "dumpling");

@@ -14,7 +14,11 @@ Template.mainAR.onRendered(function(){
   context = canvas.getContext('2d'),
   video = $('video', ar)[0],
   navLat, navLong, accurate,
-  hashtag, sx, sy, sw, sh;
+  hashtag;
+  var sx = 0, 
+  sy = 0, 
+  sw = video.width, 
+  sh = video.height;
 
   console.log("video w: ", video.width, " video h: ", video.height);
   console.log("window w: ", $(window).width())
@@ -92,7 +96,7 @@ Template.mainAR.onRendered(function(){
   function fullscreenvid(video){
     window.addEventListener('resize', function () {resize(canvas);}, false);
 
-    resize(canvas);
+    resize(video);
 
     function resize(video) {
       var scale = {x: 1, y: 1};
@@ -143,18 +147,26 @@ setInterval(function(){
 
 var renderTweets = function(){
   var tweets = Tweets.find({}, {sort: {createdAt: -1}}).fetch();
+  //var tweetElements = [];
   if(!tweets.length) {
     console.log("no tweets");
     return;
   }
+  var ageMax;
+  tweets.map(function(data){
+    var age = parseInt(Date.now() - data.tweetCreatedAt);
+    if (ageMax < age){
+      ageMax = age;
+    }
+  })
   tweets.map(function(data){
     var age = parseInt(Date.now() - data.tweetCreatedAt);
         // 14400000 ms == 4 hrs
         // 3600000 ms == 1 hr
         // 1200000 ms = 20min
         // 60000 ms = 1min
-        var ageMax = (3600000),
-        fsizeMax = 50,
+        var ageMax = (3600000);
+        var fsizeMax = 50,
         fsizeMin = 0;
         if (age > ageMax){ age = ageMax };
         var fsize = Math.floor((((fsizeMin-fsizeMax)*age)/ageMax)+fsizeMax);
