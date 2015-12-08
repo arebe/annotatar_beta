@@ -1,0 +1,12 @@
+{
+	"twitter": {
+		"consumer_key": "ObCo0bGsmBmdtZWcFhPEv6gqz",
+		"consumer_secret": "sYoF4oxJkjaF9pdtfIl5agGw4TaHZexE216dIFmKgBrmvU1jjj",
+		"access_token": "11008862-5yzVudC9NPtjOu96OebfSVxHnmq6RpNVRqjxYOP7B",
+		"access_token_secret": "rJgIeH5pViUCnVWLjAsEF4uTpTHzYQe0vhMxC1FgnKUfj"
+	}, 
+	"public": {
+		"houston_root_route": "/houston",
+		"houston_documents_per_page": "30"
+	}
+}
