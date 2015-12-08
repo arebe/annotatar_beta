@@ -26,21 +26,54 @@ Template.mainAR.onRendered(function(){
   context.canvas.height = $(window).height();
   context.font = "20px serif";
 
+//****************************
+// navigator.mediaDevices = navigator.mediaDevices || ((navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
+//    getUserMedia: function(c) {
+//      return new Promise(function(y, n) {
+//        (navigator.mozGetUserMedia ||
+//         navigator.webkitGetUserMedia).call(navigator, c, y, n);
+//      });
+//    }
+// } : null);
+
+// if (!navigator.mediaDevices) {
+//   console.log("getUserMedia() not supported.");
+//   return;
+// }
+
+// // Prefer camera resolution nearest to 1280x720.
+
+// var constraints = { audio: false, video: { width: 1280, height: 720 } };
+
+// navigator.mediaDevices.getUserMedia(constraints)
+// .then(function(stream) {
+//   var video = document.querySelector('video');
+//   video.src = window.URL.createObjectURL(stream);
+//   video.onloadedmetadata = function(e) {
+//     video.play();
+//   };
+// })
+// .catch(function(err) {
+//   console.log(err.name + ": " + err.message);
+// });
+//****************************
+
+
   try{
     navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
     window.URL = window.URL || window.mozURL || window.webkitURL;
 
       // note ab resolution: http://stackoverflow.com/questions/27420581/get-maximum-video-resolution-with-getusermedia
-      navigator.getUserMedia({'video': {
+      navigator.getUserMedia({ audio: false, 'video': {
         optional: [
-        {minWidth: 320},
-        {minWidth: 640},
-        {minWidth: 800},
-        {minWidth: 900},
-        {minWidth: 1024},
-        {minWidth: 1280},
-        {minWidth: 1920},
-        {minWidth: 2560}
+        // {minWidth: 320},
+        // {minWidth: 640},
+        // {minWidth: 800},
+        // {minWidth: 900},
+        // {minWidth: 1024},
+        // {minWidth: 1280},
+        // {minWidth: 1920},
+        // {minWidth: 2560}
         ]
       }}, 
       function(stream){
@@ -61,8 +94,8 @@ Template.mainAR.onRendered(function(){
     window.addEventListener(
       'load',
       function () {
-        fullscreencan(canvas);
-        fullscreenvid(video);
+        //fullscreencan(canvas);
+        //fullscreenvid(video);
       },
       false
       );
@@ -124,7 +157,7 @@ Template.mainAR.onRendered(function(){
   } // end fullscreenvid
 
 
-setInterval(function(){
+  setInterval(function(){
 
       // if ((video.width - $(window).width()) > (video.height - $(window).height())) {
       //   // portrait
@@ -140,10 +173,10 @@ setInterval(function(){
       //   w = $(window).width();
       //   h = video.height * ($(window).width()/video.width);
       // }
-      var img = context.drawImage(video, sx, sy, sw, sh, 0, 0, $(window).width(), $(window).height());
-      renderTweets();
+    var img = context.drawImage(video, sx, sy, sw, sh, 0, 0, $(window).width(), $(window).height());
+    renderTweets();
       //("geolocation" in navigator) ? renderTweets() : renderNoTweets("Please enable geolocation for full AR experience!");
-    }, 100);
+  }, 100); // end setInterval
 
 var renderTweets = function(){
   var tweets = Tweets.find({}, {sort: {createdAt: -1}}).fetch();
@@ -152,7 +185,7 @@ var renderTweets = function(){
     console.log("no tweets");
     return;
   }
-  var ageMax;
+  var ageMax = 0;
   tweets.map(function(data){
     var age = parseInt(Date.now() - data.tweetCreatedAt);
     if (ageMax < age){
@@ -165,7 +198,7 @@ var renderTweets = function(){
         // 3600000 ms == 1 hr
         // 1200000 ms = 20min
         // 60000 ms = 1min
-        var ageMax = (3600000);
+        //var ageMax = (3600000);
         var fsizeMax = 50,
         fsizeMin = 0;
         if (age > ageMax){ age = ageMax };
@@ -176,9 +209,8 @@ var renderTweets = function(){
         context.font = fsize+'px "Walter Turncoat"';
         context.fillStyle = 'rgba('+data.color.r+','+data.color.g+','+ data.color.b+','+ alpha+')';
         context.fillText(data.text, data.xPos+offset.x, data.yPos+offset.y);
-      });
-
-};
+    }); // end tweets.map
+}; // end renderTweets
 
 $("#downloadBtn").click(function(event) {
   var filename = 'annotatar_data.csv';
