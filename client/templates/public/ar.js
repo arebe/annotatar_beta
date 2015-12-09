@@ -94,8 +94,8 @@ Template.mainAR.onRendered(function(){
     window.addEventListener(
       'load',
       function () {
-        //fullscreencan(canvas);
-        //fullscreenvid(video);
+        fullscreencan(canvas);
+        fullscreenvid(video);
       },
       false
       );
@@ -132,26 +132,31 @@ Template.mainAR.onRendered(function(){
     resize(video);
 
     function resize(video) {
-      var scale = {x: 1, y: 1};
-      scale.x = $(window).width() / video.width;
-      scale.y = $(window).height() / video.height;
-      if ($(window).width() < $(window).height()){
+      // var scale = {x: 1, y: 1};
+      // scale.x = window.innerWidth / video.width;
+      // scale.y = window.innerHeight / video.height;
+      if (window.innerHeight > window.innerWidth){
         // portrait mode
-        // scale using y
-        sw = video.width * scale.y;
-        sh = video.height * scale.y;
         // slice extra x
-        sx = (sxw - $(window).width()) / 2;
+        if (video.width > window.innerWidth){
+          sx = (video.width - window.innerWidth) / 2;
+        }
+        else{
+          sx = 0
+        }
         sy = 0;
       }
       else{
         // lanscape mode
-        // scale using x
-        sw = video.width * scale.x;
-        sh = video.height * scale.y;
         // slice extra y
         sx = 0;
-        sy = (sh - $(window).height()) / 2;
+        if(video.height > window.innerHeight){
+          sy = (video.height - window.innerHeight) / 2;
+        }
+        else{
+          sy = 0;
+        }
+        
       }
     }
   } // end fullscreenvid
@@ -173,7 +178,7 @@ Template.mainAR.onRendered(function(){
       //   w = $(window).width();
       //   h = video.height * ($(window).width()/video.width);
       // }
-    var img = context.drawImage(video, sx, sy, sw, sh, 0, 0, $(window).width(), $(window).height());
+    var img = context.drawImage(video, sx, sy, video.width, video.height, 0, 0, window.innerWidth, window.innerHeight);
     renderTweets();
       //("geolocation" in navigator) ? renderTweets() : renderNoTweets("Please enable geolocation for full AR experience!");
   }, 100); // end setInterval
@@ -191,17 +196,18 @@ var renderTweets = function(){
     if (ageMax < age){
       ageMax = age;
     }
-  })
+  });
   tweets.map(function(data){
     var age = parseInt(Date.now() - data.tweetCreatedAt);
         // 14400000 ms == 4 hrs
         // 3600000 ms == 1 hr
         // 1200000 ms = 20min
         // 60000 ms = 1min
-        //var ageMax = (3600000);
+        var ageMax = (3600000);
         var fsizeMax = 50,
         fsizeMin = 0;
         if (age > ageMax){ age = ageMax };
+        // the scale needs to be non-linear...
         var fsize = Math.floor((((fsizeMin-fsizeMax)*age)/ageMax)+fsizeMax);
         alphaMax = 1.0;
         alphaMin = 0;
@@ -227,5 +233,31 @@ $("#captureBtn").click(function(e){
   $("#captureLink").attr('href', url).click();
 
 });
+
+ window.ondevicemotion = function(e){
+    // var now = Date.now();
+    // offset.time = now - offset.lastTime;
+    // offset.lastTime = now;
+    // var interval = e.interval;
+    // var accX = Math.round(e.accelerationIncludingGravity.x*10)/10;
+    // var accY = Math.round(e.accelerationIncludingGravity.y*10)/10;
+    // offset.velX = offset.velX + (accX * (offset.time/1000));
+    // offset.velY = offset.velY + (accY * (offset.time/1000));
+    // var xincr = 0;
+    // if (accX > 0){
+    //   accX > 1 ? xincr = 5 : xincr = 1;
+    // }
+    // else if(accX < 0){
+    //   accX < -1 ? xincr = -5 : xincr = -1;
+    // }
+    // offset.x += xincr;
+    
+    // offset.y -= offset.velY;
+    // console.log("accX: "+accX+" accY: "+accY+" offset.x: "+offset.x+" offset.y: "+offset.y+" offset.time: "+offset.time/1000+" interval: "+interval);
+
+    // offset.velX = 0;
+    // offset.velY = 0;
+
+  } // end ondevicemotion
 
 }); // end template.mainar.onrendered

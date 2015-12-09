@@ -63,31 +63,7 @@ Meteor.startup(function(){
 
   });  // end onstartup
 
-  window.ondevicemotion = function(e){
-  // var now = Date.now();
-  // offset.time = now - offset.lastTime;
-  // offset.lastTime = now;
-  // var interval = e.interval;
-  var accX = Math.round(e.accelerationIncludingGravity.x*10)/10;
-  var accY = Math.round(e.accelerationIncludingGravity.y*10)/10;
-  // offset.velX = offset.velX + (accX * (offset.time/1000));
-  // offset.velY = offset.velY + (accY * (offset.time/1000));
-  // var xincr = 0;
-  // if (accX > 0){
-  //   accX > 1 ? xincr = 5 : xincr = 1;
-  // }
-  // else if(accX < 0){
-  //   accX < -1 ? xincr = -5 : xincr = -1;
-  // }
-  // offset.x += xincr;
-  
-  // offset.y -= offset.velY;
-  // console.log("accX: "+accX+" accY: "+accY+" offset.x: "+offset.x+" offset.y: "+offset.y+" offset.time: "+offset.time/1000+" interval: "+interval);
-
-  // offset.velX = 0;
-  // offset.velY = 0;
-
-  } // end ondevicemotion
+ 
 
 } // end if meteor.isClient
 
