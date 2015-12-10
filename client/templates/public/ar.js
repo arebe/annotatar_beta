@@ -1,5 +1,6 @@
-Template.mainAR.onRendered(function(){
-
+Template.ar.onRendered(function(){
+  var ffmobile = navigator.userAgent.indexOf('Firefox') > -1 && navigator.userAgent.indexOf("Mobile") > -1;
+ 
   var offset = {
     lastTime: 0,
     time: 0,
@@ -25,38 +26,6 @@ Template.mainAR.onRendered(function(){
   context.canvas.width = $(window).width();
   context.canvas.height = $(window).height();
   context.font = "20px serif";
-
-//****************************
-// navigator.mediaDevices = navigator.mediaDevices || ((navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? {
-//    getUserMedia: function(c) {
-//      return new Promise(function(y, n) {
-//        (navigator.mozGetUserMedia ||
-//         navigator.webkitGetUserMedia).call(navigator, c, y, n);
-//      });
-//    }
-// } : null);
-
-// if (!navigator.mediaDevices) {
-//   console.log("getUserMedia() not supported.");
-//   return;
-// }
-
-// // Prefer camera resolution nearest to 1280x720.
-
-// var constraints = { audio: false, video: { width: 1280, height: 720 } };
-
-// navigator.mediaDevices.getUserMedia(constraints)
-// .then(function(stream) {
-//   var video = document.querySelector('video');
-//   video.src = window.URL.createObjectURL(stream);
-//   video.onloadedmetadata = function(e) {
-//     video.play();
-//   };
-// })
-// .catch(function(err) {
-//   console.log(err.name + ": " + err.message);
-// });
-//****************************
 
 
   try{
@@ -91,131 +60,71 @@ Template.mainAR.onRendered(function(){
     video.style.position = "absolute";
     video.style.visibility = "hidden";
 
-    window.addEventListener(
-      'load',
-      function () {
-        fullscreencan(canvas);
-        fullscreenvid(video);
-      },
-      false
-      );
-
-    function fullscreencan(canvas) {
-      var style = canvas.getAttribute('style') || '';
-
-      window.addEventListener('resize', function () {resize(canvas);}, false);
-
-      resize(canvas);
-
-      function resize(canvas) {
-        var scale = {x: 1, y: 1};
-      // scale > 1 if viewport dim is larger
-      scale.x = (window.innerWidth - 10) / canvas.width; 
-      scale.y = (window.innerHeight - 10) / canvas.height;
-      //console.log("window.innerHeight: ", window.innerHeight - 10, " canvas.height: ", canvas.height);
-      //console.log("scale: ", scale);
-      if (scale.x < 1 || scale.y < 1) {
-        scale = '1, 1'; // if canvas is larger (on either dim), no scaling needed
-      } else if (scale.x < scale.y) {  
-        scale = scale.x + ', ' + scale.x;  // if landscape, use x scale
-      } else {
-        scale = scale.y + ', ' + scale.y;  // if portrait, use y scale
-      }
-
-      canvas.setAttribute('style', style + ' ' + '-ms-transform-origin: center top; -webkit-transform-origin: center top; -moz-transform-origin: center top; -o-transform-origin: center top; transform-origin: center top; -ms-transform: scale(' + scale + '); -webkit-transform: scale3d(' + scale + ', 1); -moz-transform: scale(' + scale + '); -o-transform: scale(' + scale + '); transform: scale(' + scale + ');');
-    }
-  } // end fullscreencan
-
-  function fullscreenvid(video){
-    window.addEventListener('resize', function () {resize(canvas);}, false);
-
-    resize(video);
-
-    function resize(video) {
-      // var scale = {x: 1, y: 1};
-      // scale.x = window.innerWidth / video.width;
-      // scale.y = window.innerHeight / video.height;
-      if (window.innerHeight > window.innerWidth){
-        // portrait mode
-        // slice extra x
-        if (video.width > window.innerWidth){
-          sx = (video.width - window.innerWidth) / 2;
-        }
-        else{
-          sx = 0
-        }
-        sy = 0;
-      }
-      else{
-        // lanscape mode
-        // slice extra y
-        sx = 0;
-        if(video.height > window.innerHeight){
-          sy = (video.height - window.innerHeight) / 2;
-        }
-        else{
-          sy = 0;
-        }
-        
-      }
-    }
-  } // end fullscreenvid
-
-
   setInterval(function(){
+    if(ffmobile){
+      var wh = window.innerHeight - video.height;
+      context.save();
+      context.scale(1, -1);
+      context.translate(0,-wh);
+      var img = context.drawImage(video, 0, -video.height, window.innerWidth, window.innerHeight);
+      context.restore();
+    }
+    else{
+      var img = context.drawImage(video, 0, 0, window.innerWidth, window.innerHeight);
+    }
 
-      // if ((video.width - $(window).width()) > (video.height - $(window).height())) {
-      //   // portrait
-      //   x = (video.width - $(window).width())/2;
-      //   y = 0;
-      //   w = video.width * ($(window).height()/video.height);
-      //   h = $(window).height();
-      // }
-      // else {
-      //   // landscape
-      //   x = 0;
-      //   y = (video.height - $(window).height())/2;
-      //   w = $(window).width();
-      //   h = video.height * ($(window).width()/video.width);
-      // }
-    var img = context.drawImage(video, sx, sy, video.width, video.height, 0, 0, window.innerWidth, window.innerHeight);
+    //renderTest("TEST");
+    
     renderTweets();
-      //("geolocation" in navigator) ? renderTweets() : renderNoTweets("Please enable geolocation for full AR experience!");
+    
   }, 100); // end setInterval
 
+var renderTest = function(testText){
+    context.font = '50px "Walter Turncoat"';
+    context.fillStyle = 'rgba(255, 60, 180, 1)';
+    context.fillText(testText, 25, 100);
+}
+
 var renderTweets = function(){
+  //context.fillStyle = 'rgba(60, 180, 255, 1)';
+  //context.fillText("THIS IS A TEST", 25, 150);
   var tweets = Tweets.find({}, {sort: {createdAt: -1}}).fetch();
-  //var tweetElements = [];
   if(!tweets.length) {
     console.log("no tweets");
     return;
   }
   var ageMax = 0;
+  // tweets.map(function(data){
+  //   var age = parseInt(Date.now() - data.tweetCreatedAt);
+  //   if (ageMax < age){
+  //     ageMax = age;
+  //   }
+  // });
+  var i = 1;
   tweets.map(function(data){
-    var age = parseInt(Date.now() - data.tweetCreatedAt);
-    if (ageMax < age){
-      ageMax = age;
-    }
-  });
-  tweets.map(function(data){
+    // context.fillStyle = 'rgba(180, 255, 60, 1)';
+    // context.fillText("THIS IS A TESTIE", 30, 50*i);
+    i+=1;
     var age = parseInt(Date.now() - data.tweetCreatedAt);
         // 14400000 ms == 4 hrs
         // 3600000 ms == 1 hr
         // 1200000 ms = 20min
         // 60000 ms = 1min
-        var ageMax = (3600000);
-        var fsizeMax = 50,
-        fsizeMin = 0;
-        if (age > ageMax){ age = ageMax };
-        // the scale needs to be non-linear...
-        var fsize = Math.floor((((fsizeMin-fsizeMax)*age)/ageMax)+fsizeMax);
-        alphaMax = 1.0;
-        alphaMin = 0;
-        var alpha = (((alphaMin-alphaMax)*age)/ageMax)+alphaMax;
-        context.font = fsize+'px "Walter Turncoat"';
-        context.fillStyle = 'rgba('+data.color.r+','+data.color.g+','+ data.color.b+','+ alpha+')';
-        context.fillText(data.text, data.xPos+offset.x, data.yPos+offset.y);
-    }); // end tweets.map
+    var ageMax = (3600000);
+    var fsizeMax = 50,
+    fsizeMin = 0;
+    if (age > ageMax){ age = ageMax };
+    // the scale needs to be non-linear...
+    var fsize = Math.floor((((fsizeMin-fsizeMax)*age)/ageMax)+fsizeMax);
+    alphaMax = 1.0;
+    alphaMin = 0;
+    var alpha = (((alphaMin-alphaMax)*age)/ageMax)+alphaMax;
+    fsize = 30;
+    var alpha = 0.9;
+    context.font = fsize+'px "Walter Turncoat"';
+    context.fillStyle = 'rgba('+data.color.r+','+data.color.g+','+ data.color.b+','+ alpha+')';
+    context.fillText(data.text, data.xPos+offset.x, data.yPos+offset.y);
+  }); // end tweets.map
 }; // end renderTweets
 
 $("#downloadBtn").click(function(event) {
@@ -234,7 +143,7 @@ $("#captureBtn").click(function(e){
 
 });
 
- window.ondevicemotion = function(e){
+ //window.ondevicemotion = function(e){
     // var now = Date.now();
     // offset.time = now - offset.lastTime;
     // offset.lastTime = now;
@@ -258,6 +167,6 @@ $("#captureBtn").click(function(e){
     // offset.velX = 0;
     // offset.velY = 0;
 
-  } // end ondevicemotion
+  //} // end ondevicemotion
 
 }); // end template.mainar.onrendered
