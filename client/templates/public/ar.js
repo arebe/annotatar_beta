@@ -33,18 +33,7 @@ Template.ar.onRendered(function(){
     window.URL = window.URL || window.mozURL || window.webkitURL;
 
       // note ab resolution: http://stackoverflow.com/questions/27420581/get-maximum-video-resolution-with-getusermedia
-      navigator.getUserMedia({ audio: false, 'video': {
-        optional: [
-        // {minWidth: 320},
-        // {minWidth: 640},
-        // {minWidth: 800},
-        // {minWidth: 900},
-        // {minWidth: 1024},
-        // {minWidth: 1280},
-        // {minWidth: 1920},
-        // {minWidth: 2560}
-        ]
-      }}, 
+      navigator.getUserMedia({ audio: false, 'video': true}, 
       function(stream){
         video.src = window.opera ? stream : window.URL.createObjectURL(stream);
         video.play();
@@ -143,30 +132,30 @@ $("#captureBtn").click(function(e){
 
 });
 
- //window.ondevicemotion = function(e){
-    // var now = Date.now();
-    // offset.time = now - offset.lastTime;
-    // offset.lastTime = now;
-    // var interval = e.interval;
-    // var accX = Math.round(e.accelerationIncludingGravity.x*10)/10;
-    // var accY = Math.round(e.accelerationIncludingGravity.y*10)/10;
-    // offset.velX = offset.velX + (accX * (offset.time/1000));
-    // offset.velY = offset.velY + (accY * (offset.time/1000));
-    // var xincr = 0;
-    // if (accX > 0){
-    //   accX > 1 ? xincr = 5 : xincr = 1;
-    // }
-    // else if(accX < 0){
-    //   accX < -1 ? xincr = -5 : xincr = -1;
-    // }
-    // offset.x += xincr;
+ window.ondevicemotion = function(e){
+    var now = Date.now();
+    offset.time = now - offset.lastTime;
+    offset.lastTime = now;
+    var interval = e.interval;
+    var accX = Math.round(e.accelerationIncludingGravity.x*10)/10;
+    var accY = Math.round(e.accelerationIncludingGravity.y*10)/10;
+    offset.velX = offset.velX + (accX * (offset.time/1000));
+    offset.velY = offset.velY + (accY * (offset.time/1000));
+    var xincr = 0;
+    if (accX > 0){
+      accX > 1 ? xincr = 5 : xincr = 1;
+    }
+    else if(accX < 0){
+      accX < -1 ? xincr = -5 : xincr = -1;
+    }
+    offset.x += xincr;
     
-    // offset.y -= offset.velY;
-    // console.log("accX: "+accX+" accY: "+accY+" offset.x: "+offset.x+" offset.y: "+offset.y+" offset.time: "+offset.time/1000+" interval: "+interval);
+    offset.y -= offset.velY;
+    //console.log("accX: "+accX+" accY: "+accY+" offset.x: "+offset.x+" offset.y: "+offset.y+" offset.time: "+offset.time/1000+" interval: "+interval);
 
-    // offset.velX = 0;
-    // offset.velY = 0;
+    offset.velX = 0;
+    offset.velY = 0;
 
-  //} // end ondevicemotion
+  } // end ondevicemotion
 
 }); // end template.mainar.onrendered

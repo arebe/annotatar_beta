@@ -3,9 +3,8 @@ if (Meteor.isServer) {
 
   Meteor.startup(function () {
 
-
-
     Hashtags.remove({});
+    Tweets.remove({});
 
    //**** hashtags **/
    Meteor.call("addHashtag", 40.81, -73.96, "columbia");
@@ -15,7 +14,7 @@ if (Meteor.isServer) {
    Meteor.call("addHashtag", 40.81, -73.95, "ambassades");
    Meteor.call("addHashtag", 40.73, -74, "dumpling");
    Meteor.call("addHashtag", 40.74, -74, "meow");
-   Meteor.call("addHashtag", 42.37, -71.12, "harvard");
+   Meteor.call("addHashtag", 42.37, -71.12, "harvardclimate");
    Meteor.call("addHashtag", 38.91, -77.02, "whatever");
    Meteor.call("addHashtag", 48.86, 2.37, "cop21");
    Meteor.call("addHashtag", 48.86, 2.38, "cop21");
