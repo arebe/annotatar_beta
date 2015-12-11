@@ -30,7 +30,7 @@ Meteor.startup(function(){
         navLat = Math.round(100*navLat)/100;
         navLon = Math.round(100*navLon)/100;
         console.log("lat: ", navLat, " long: ", navLon, " accuracy: ", position.coords.accuracy);
-        //$("#dynamsg").append('<p>latitude: '+navLat+' longitude: '+navLon+' accuracy: <span id="acc">'+position.coords.accuracy+'</span></p>');
+        $("#dynamsg").append('<p>latitude: '+navLat+' longitude: '+navLon+' accuracy: <span id="acc">'+position.coords.accuracy+'</span></p>');
         Meteor.call("findHashtag", navLat, navLon, function(err, result){
           if(result){
             hashtag = result;
@@ -50,12 +50,9 @@ Meteor.startup(function(){
       navLat = 0;
       navLon = 0;
       console.log("no geolocation detected");
-      //$("#dynamsg").append('<p>no geolocation detected :(</p>');
     }
   } catch(err){
-    console.log("geolocation error: ", err);
-    //$("#dynamsg").append('<p>geolocation error:', err,'(</p>');
-        
+    console.log("geolocation error: ", err);        
   }
 
   var renderNoTweets = function(message){

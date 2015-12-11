@@ -1,8 +1,9 @@
 <body></body>
 
 <template name="docPage">
-  <h1>This is the documentation page</h1>
+  <h1>Welcome to the documentation page for annotatAR</h1>
   <hr>
+  {{> gallery}}
   <article id="explanation">
   	<h2>lo-fi augmented reality for the mobile web</h2>
   	<p> annotatAR provides a look at the ghostly voices of Twitter during events that co-occur in the related sites of the "outernet" or "real world" as well as the networked universe of a virtual settlement on a Twittter hashtag.</p>
@@ -25,6 +26,43 @@
 <template name="map">
   <div id="map">
     {{> googleMap name="map" options=mapOptions}}
+  </div>
+</template>
+
+<template name="gallery">
+<div class="gallery-container">
+  <img src="screencaps/annotatar_cap_01.png" class="gallery img-rounded pull-xs-left img-fluid easy-modal-open" href="#modal1" width="250px" alt="Invisble Monument launch">
+  <img src="screencaps/annotatar_yaminyc_20150912_08.png" class="gallery img-rounded pull-xs-left img-fluid easy-modal-open" href="#modal2" width="250px" alt="Internet Yami-Ichi NYC">
+  <img src="screencaps/invisible_screenshot_20150930_01.png" class="gallery img-rounded pull-xs-left img-fluid easy-modal-open" width="250px" href="#modal3" alt="Invisble Monument launch">
+
+  <img src="screencaps/invisible_screenshot_20150930_04.png" class="gallery img-rounded pull-xs-left img-fluid easy-modal-open" width="250px" href="#modal4" alt="Invisble Monument launch">
+  <img src="screencaps/annotatar_cap.png" class="gallery img-rounded pull-xs-left img-fluid easy-modal-open" width="250px" href="#modal5" alt="test image">
+  <img src="screencaps/annotatar_yaminyc_20150912_08.png" class="gallery img-rounded pull-xs-left img-fluid easy-modal-open" width="250px" href="#modal6" alt="Invisble Monument launch">
+</div>
+<!-- hidden modals -->
+  <div class="easy-modal" id="modal1">
+    <span class="btn_x easy-modal-close">X</span>
+    <img class="centered" src="screencaps/annotatar_cap_01.png" alt="" width="900px">
+  </div>
+  <div class="easy-modal" id="modal2">
+    <span class="btn_x easy-modal-close">X</span>
+    <img class="centered" src="screencaps/annotatar_yaminyc_20150912_08.png" alt="" width="900px">
+  </div>
+  <div class="easy-modal" id="modal3">
+    <span class="btn_x easy-modal-close">X</span>
+    <img class="centered" src="screencaps/invisible_screenshot_20150930_01.png" alt="" width="900px">
+  </div>
+  <div class="easy-modal" id="modal4">
+    <span class="btn_x easy-modal-close">X</span>
+    <img class="centered" src="screencaps/invisible_screenshot_20150930_04.png" alt="" width="900px">
+  </div>
+  <div class="easy-modal" id="modal5">
+    <span class="btn_x easy-modal-close">X</span>
+    <img class="centered" src="screencaps/annotatar_cap.png" alt="" width="900px">
+  </div>
+  <div class="easy-modal" id="modal6">
+    <span class="btn_x easy-modal-close">X</span>
+    <img class="centered" src="screencaps/annotatar_yaminyc_20150912_08.png" alt="" width="900px">
   </div>
 </template>
 

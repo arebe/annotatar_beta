@@ -33,7 +33,6 @@ Template.ar.onRendered(function(){
     navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
     window.URL = window.URL || window.mozURL || window.webkitURL;
 
-      // note ab resolution: http://stackoverflow.com/questions/27420581/get-maximum-video-resolution-with-getusermedia
       navigator.getUserMedia({ audio: false, 'video': true}, 
       function(stream){
         video.src = window.opera ? stream : window.URL.createObjectURL(stream);
@@ -114,7 +113,7 @@ var renderTweets = function(){
     fsizeMin = 0;
     if (age > ageMax){ age = ageMax };
     // the scale needs to be non-linear...
-    var fsize = Math.floor((((fsizeMin-fsizeMax)*age)/ageMax)+fsizeMax);
+    var fsize = Math.floor((((fsizeMin-fsizeMax)*age)/ageMax)+fsizeMax)+((Math.random()*(30-2))-20);
     alphaMax = 1.0;
     alphaMin = 0;
     var alpha = (((alphaMin-alphaMax)*age)/ageMax)+alphaMax;
@@ -125,7 +124,7 @@ var renderTweets = function(){
     context.fillText(data.text, data.xPos+offset.x, data.yPos+offset.y);
   }); // end tweets.map
   $("#hashtag").html("<p>"+Session.get("hashtag")+"</p>");
-  $("#tweetBtn").href("https://twitter.com/home?status=%23"+Session.get("hashtag")+"%20%23annotatAR");
+  //$("#tweetUrl").href("https://twitter.com/home?status=%23"+Session.get("hashtag")+"%20%23annotatAR");
 }; // end renderTweets
 
 $("#downloadBtn").click(function(event) {

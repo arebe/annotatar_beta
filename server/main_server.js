@@ -61,15 +61,15 @@ if (Meteor.isServer) {
    var handleStream = Meteor.bindEnvironment(function(tweet, err){
     console.log("***********************", err, "***********************");
     console.log("+++++++++++++++++++++++",tweet,"+++++++++++++++++++++++");
-    Meteor.call("addTweet", tweet.text, "harvardclimate");
+    Meteor.call("addTweet", tweet.text, "riseupoctober");
   });
 
 
-   // var stream = Twit.stream('statuses/filter', { track: "#"+hashtag });
+   var stream = Twit.stream('statuses/filter', { track: "#"+hashtag });
 
     //**************************************************//
     // ******  uncomment to turn the stream on: ****** //
-   // stream.on('tweet', handleStream);
+   stream.on('tweet', handleStream);
 
 
   }); // end onstartup

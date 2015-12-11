@@ -11,7 +11,25 @@ Template.docPage.helpers({
 
 Template.docPage.onRendered(function(){
 	console.log("hi i'm onRendered");
+    $(function() {
+    $('.easy-modal').easyModal({
+      // top: 20,
+      overlay: 0.2,
+      overlayColor: "#333",
+      overlayOpacity: 0.8,
+    });
 
+    $('.easy-modal-open').click(function(e) {
+      var target = $(this).attr('href');
+      $(target).trigger('openModal');
+      e.preventDefault();
+    });
+
+    $('.easy-modal-close').click(function(e) {
+      $('.easy-modal').trigger('closeModal');
+    });
+
+  });
 }); // end docPage onRendered
 
 
