@@ -7,17 +7,17 @@ if (Meteor.isServer) {
     Tweets.remove({});
 
    //**** hashtags **/
-   Meteor.call("addHashtag", 40.81, -73.96, "columbia");
-   Meteor.call("addHashtag", 40.84, -73.91, "bronx");
-   Meteor.call("addHashtag", 40.83, -73.91, "cats");
-   Meteor.call("addHashtag", 40.80, -73.96, "pastry");
-   Meteor.call("addHashtag", 40.81, -73.95, "ambassades");
-   Meteor.call("addHashtag", 40.73, -74, "dumpling");
-   Meteor.call("addHashtag", 40.74, -74, "meow");
+   Meteor.call("addHashtag", 40.80, -73.96, "test");
    Meteor.call("addHashtag", 42.37, -71.12, "harvardclimate");
-   Meteor.call("addHashtag", 38.91, -77.02, "whatever");
    Meteor.call("addHashtag", 48.86, 2.37, "cop21");
    Meteor.call("addHashtag", 48.86, 2.38, "cop21");
+   Meteor.call("addHashtag", 40.71, -74.01, "ows");
+   Meteor.call("addHashtag", 40.70, -74.01, "occupywallstreet");
+   Meteor.call("addHashtag", 40.76, -73.99, "riseupoctober");
+   Meteor.call("addHashtag", 40.73, -74, "NYCStandsWithMinneapolis");
+   Meteor.call("addHashtag", 40.73, -73.99, "Justice4Jamar");
+   Meteor.call("addHashtag", 42.35, -71.06, "occupyboston");
+   Meteor.call("addHashtag", 42.35, -71.05, "occupyboston");
 
    var hashtagsCursor = Hashtags.find();
    hashtagsCursor.map(function(h){
@@ -51,17 +51,17 @@ if (Meteor.isServer) {
       Twit.get('search/tweets',
       {
        q: h,
-       count: 20
+       count: 50
      }, handleTweets);
 
     })
 
-   //*** Stream --- old version (rewrite for multiple hashtags)
+   //*** Stream --- old version (rewrite for multiple hashtags) -- reactivated for HarvardClimate only
 
    var handleStream = Meteor.bindEnvironment(function(tweet, err){
     console.log("***********************", err, "***********************");
     console.log("+++++++++++++++++++++++",tweet,"+++++++++++++++++++++++");
-    Meteor.call("addTweet", tweet.text, hashtag);
+    Meteor.call("addTweet", tweet.text, "harvardclimate");
   });
 
 

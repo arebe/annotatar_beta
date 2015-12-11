@@ -1,5 +1,6 @@
 Template.ar.onRendered(function(){
   var ffmobile = navigator.userAgent.indexOf('Firefox') > -1 && navigator.userAgent.indexOf("Mobile") > -1;
+  var mobile = navigator.userAgent.indexOf("Mobile") > -1;
  
   var offset = {
     lastTime: 0,
@@ -57,14 +58,19 @@ Template.ar.onRendered(function(){
       context.translate(0,-wh);
       var img = context.drawImage(video, 0, -video.height, window.innerWidth, window.innerHeight);
       context.restore();
+      renderTweets();
+    }
+    else if(mobile){
+      renderWarning("Browser not supported.");
     }
     else{
       var img = context.drawImage(video, 0, 0, window.innerWidth, window.innerHeight);
+      renderTweets();
     }
 
     //renderTest("TEST");
     
-    renderTweets();
+    
     
   }, 100); // end setInterval
 
@@ -74,9 +80,15 @@ var renderTest = function(testText){
     context.fillText(testText, 25, 100);
 }
 
+var renderWarning = function(testText){
+    context.font = '50px "Walter Turncoat"';
+    context.fillStyle = "rgb(49,84,129)";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = 'rgba(255, 80, 60, 1)';
+    context.fillText(testText, 25, (canvas.height/2));
+}
+
 var renderTweets = function(){
-  //context.fillStyle = 'rgba(60, 180, 255, 1)';
-  //context.fillText("THIS IS A TEST", 25, 150);
   var tweets = Tweets.find({}, {sort: {createdAt: -1}}).fetch();
   if(!tweets.length) {
     console.log("no tweets");
@@ -91,8 +103,6 @@ var renderTweets = function(){
   // });
   var i = 1;
   tweets.map(function(data){
-    // context.fillStyle = 'rgba(180, 255, 60, 1)';
-    // context.fillText("THIS IS A TESTIE", 30, 50*i);
     i+=1;
     var age = parseInt(Date.now() - data.tweetCreatedAt);
         // 14400000 ms == 4 hrs
@@ -114,6 +124,8 @@ var renderTweets = function(){
     context.fillStyle = 'rgba('+data.color.r+','+data.color.g+','+ data.color.b+','+ alpha+')';
     context.fillText(data.text, data.xPos+offset.x, data.yPos+offset.y);
   }); // end tweets.map
+  $("#hashtag").html("<p>"+Session.get("hashtag")+"</p>");
+  $("#tweetBtn").href("https://twitter.com/home?status=%23"+Session.get("hashtag")+"%20%23annotatAR");
 }; // end renderTweets
 
 $("#downloadBtn").click(function(event) {
@@ -132,30 +144,83 @@ $("#captureBtn").click(function(e){
 
 });
 
- window.ondevicemotion = function(e){
-    var now = Date.now();
-    offset.time = now - offset.lastTime;
-    offset.lastTime = now;
-    var interval = e.interval;
-    var accX = Math.round(e.accelerationIncludingGravity.x*10)/10;
-    var accY = Math.round(e.accelerationIncludingGravity.y*10)/10;
-    offset.velX = offset.velX + (accX * (offset.time/1000));
-    offset.velY = offset.velY + (accY * (offset.time/1000));
-    var xincr = 0;
-    if (accX > 0){
-      accX > 1 ? xincr = 5 : xincr = 1;
-    }
-    else if(accX < 0){
-      accX < -1 ? xincr = -5 : xincr = -1;
-    }
-    offset.x += xincr;
+function orientationhandler(evt){
+  
+  // For FF3.6+
+  if (!evt.gamma && !evt.beta) {
+    evt.gamma = -(evt.x * (180 / Math.PI));
+    evt.beta = -(evt.y * (180 / Math.PI));
+  }
+  
+  // use evt.gamma, evt.beta, and evt.alpha 
+  // according to dev.w3.org/geo/api/spec-source-orientation
+  var tiltLR = parseInt(evt.gamma);
+  var tiltFB = parseInt(evt.beta);
+  var dir = parseInt(evt.alpha);
+  //document.getElementById("doEvent").innerHTML = "<p>dir: "+dir+"tiltFB:"+tiltFB+"tiltLR:"+tiltLR+"</p>";
+
+}
+
+window.addEventListener('deviceorientation',  orientationhandler, false);
+window.addEventListener('mozOrientation',     orientationhandler, false);
+
+if (window.DeviceOrientationEvent) {
+  //document.getElementById("doEvent").innerHTML = "DeviceOrientation";
+  // Listen for the deviceorientation event and handle the raw data
+  // window.addEventListener('deviceorientation', function(eventData) {
+  //   document.getElementById("doEvent").innerHTML = "<p>eventData: "+eventData+"</p>";
+  //   // gamma is the left-to-right tilt in degrees, where right is positive
+  //   var tiltLR = parseInt(eventData.gamma);
+
+  //   // beta is the front-to-back tilt in degrees, where front is positive
+  //   var tiltFB = parseInt(eventData.beta);
+
+  //   // alpha is the compass direction the device is facing in degrees
+  //   var dir = eventData.alpha;
+
+  //   // call our orientation event handler
+  //   deviceOrientationHandler(tiltLR, tiltFB, dir);
+  // }, false);
+} else {
+  //document.getElementById("doEvent").innerHTML = "Device orientation not supported."
+}
+
+var lastDir = 0;
+
+function deviceOrientationHandler(tiltLR, tiltFB, dir){
+  //document.getElementById("doEvent").innerHTML = "<p>dir: "+dir+"tiltFB:"+tiltFB+"tiltLR:"+tiltLR+"</p>";
+  //console.log("dir: ", dir);
+  //deltaDir = dir - lastDir;
+  //console.log("deltadir: ", deltaDir);
+}
+
+
+
+
+ // window.ondevicemotion = function(e){
+ //    var now = Date.now();
+ //    offset.time = now - offset.lastTime;
+ //    offset.lastTime = now;
+ //    var interval = e.interval;
+ //    var accX = Math.round(e.accelerationIncludingGravity.x*10)/10;
+ //    var accY = Math.round(e.accelerationIncludingGravity.y*10)/10;
+ //    offset.velX = offset.velX + (accX * (offset.time/1000));
+ //    offset.velY = offset.velY + (accY * (offset.time/1000));
+ //    var xincr = 0;
+ //    if (accY > 0){
+ //      accY > 1 ? xincr = 3 : xincr = 1;
+ //    }
+ //    else if(accY < 0){
+ //      accY < -1 ? xincr = -3 : xincr = -1;
+ //    }
+ //    offset.x += xincr;
     
-    offset.y -= offset.velY;
-    //console.log("accX: "+accX+" accY: "+accY+" offset.x: "+offset.x+" offset.y: "+offset.y+" offset.time: "+offset.time/1000+" interval: "+interval);
+ //    offset.y -= offset.velY;
+ //    //console.log("accX: "+accX+" accY: "+accY+" offset.x: "+offset.x+" offset.y: "+offset.y+" offset.time: "+offset.time/1000+" interval: "+interval);
 
-    offset.velX = 0;
-    offset.velY = 0;
+ //    offset.velX = 0;
+ //    offset.velY = 0;
 
-  } // end ondevicemotion
+ //  } // end ondevicemotion
 
 }); // end template.mainar.onrendered

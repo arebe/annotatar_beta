@@ -23,35 +23,39 @@ Meteor.startup(function(){
   var navLat, navLon, hashtag;
 
   try {
-    if ("geolocation" in navigator){
+    if (navigator.geolocation){
       navigator.geolocation.getCurrentPosition(function(position){
         navLat = position.coords.latitude;
         navLon = position.coords.longitude;
         navLat = Math.round(100*navLat)/100;
         navLon = Math.round(100*navLon)/100;
         console.log("lat: ", navLat, " long: ", navLon, " accuracy: ", position.coords.accuracy);
-        $("#dynamsg").append('<p>latitude: '+navLat+' longitude: '+navLon+' accuracy: <span id="acc">'+position.coords.accuracy+'</span></p>');
+        //$("#dynamsg").append('<p>latitude: '+navLat+' longitude: '+navLon+' accuracy: <span id="acc">'+position.coords.accuracy+'</span></p>');
         Meteor.call("findHashtag", navLat, navLon, function(err, result){
           if(result){
             hashtag = result;
             console.log("subscribing to: ", hashtag);
             Meteor.subscribe("tweets", hashtag);
+            Session.set("hashtag", hashtag);
           }
           else{
             console.log("no hashtag found! subscribing to #occupy");
             Meteor.subscribe("tweets", "occupy");
+            Session.set("hashtag", occupy);
           }
         });
-        console.log('hashtagofthemoment: ', hashtag);
-
       });
     }
     else{
       navLat = 0;
       navLon = 0;
+      console.log("no geolocation detected");
+      //$("#dynamsg").append('<p>no geolocation detected :(</p>');
     }
   } catch(err){
     console.log("geolocation error: ", err);
+    //$("#dynamsg").append('<p>geolocation error:', err,'(</p>');
+        
   }
 
   var renderNoTweets = function(message){
