@@ -88,41 +88,31 @@ var renderWarning = function(testText){
 }
 
 var renderTweets = function(){
-  var tweets = Tweets.find({}, {sort: {createdAt: -1}}).fetch();
-  if(!tweets.length) {
-    console.log("no tweets");
-    return;
-  }
-  var ageMax = 0;
-  // tweets.map(function(data){
-  //   var age = parseInt(Date.now() - data.tweetCreatedAt);
-  //   if (ageMax < age){
-  //     ageMax = age;
-  //   }
-  // });
-  var i = 1;
-  tweets.map(function(data){
-    i+=1;
-    var age = parseInt(Date.now() - data.tweetCreatedAt);
+      var tweets = Tweets.find({}, {sort: {createdAt: -1}}).fetch();
+      if(!tweets.length) {
+        console.log("no tweets");
+        return;
+      }
+      tweets.map(function(data){
+        var age = parseInt(Date.now() - data.tweetCreatedAt);
         // 14400000 ms == 4 hrs
         // 3600000 ms == 1 hr
         // 1200000 ms = 20min
         // 60000 ms = 1min
-    var ageMax = (3600000);
-    var fsizeMax = 50,
-    fsizeMin = 0;
-    if (age > ageMax){ age = ageMax };
-    // the scale needs to be non-linear...
-    var fsize = Math.floor((((fsizeMin-fsizeMax)*age)/ageMax)+fsizeMax)+((Math.random()*(30-2))-20);
-    alphaMax = 1.0;
-    alphaMin = 0;
-    var alpha = (((alphaMin-alphaMax)*age)/ageMax)+alphaMax;
-    fsize = 30;
-    var alpha = 0.9;
-    context.font = fsize+'px "Walter Turncoat"';
-    context.fillStyle = 'rgba('+data.color.r+','+data.color.g+','+ data.color.b+','+ alpha+')';
-    context.fillText(data.text, data.xPos+offset.x, data.yPos+offset.y);
-  }); // end tweets.map
+        var ageMax = (36*3600000),
+        fsizeMax = 50,
+        fsizeMin = 0;
+        if (age > ageMax){ age = ageMax };
+        var fsize = Math.floor((((fsizeMin-fsizeMax)*age)/ageMax)+fsizeMax);
+        alphaMax = 1.0;
+        alphaMin = 0;
+        var alpha = (((alphaMin-alphaMax)*age)/ageMax)+alphaMax;
+        context.font = fsize+'px "Walter Turncoat"';
+        context.fillStyle = 'rgba('+data.color.r+','+data.color.g+','+ data.color.b+','+ alpha+')';
+        context.fillText(data.text, data.xPos+offset.x, data.yPos+offset.y);
+      });
+
+
   $("#hashtag").html("<p>"+Session.get("hashtag")+"</p>");
   //$("#tweetUrl").href("https://twitter.com/home?status=%23"+Session.get("hashtag")+"%20%23annotatAR");
 }; // end renderTweets

@@ -7,7 +7,6 @@ if (Meteor.isServer) {
     Tweets.remove({});
 
    //**** hashtags **/
-   Meteor.call("addHashtag", 40.80, -73.96, "test");
    Meteor.call("addHashtag", 42.37, -71.12, "harvardclimate");
    Meteor.call("addHashtag", 48.86, 2.37, "cop21");
    Meteor.call("addHashtag", 48.86, 2.38, "cop21");
@@ -18,6 +17,7 @@ if (Meteor.isServer) {
    Meteor.call("addHashtag", 40.73, -73.99, "Justice4Jamar");
    Meteor.call("addHashtag", 42.35, -71.06, "occupyboston");
    Meteor.call("addHashtag", 42.35, -71.05, "occupyboston");
+   Meteor.call("addHashtag", 42.4, -71.1, "harvardclimate");
 
    var hashtagsCursor = Hashtags.find();
    hashtagsCursor.map(function(h){
@@ -51,7 +51,7 @@ if (Meteor.isServer) {
       Twit.get('search/tweets',
       {
        q: h,
-       count: 50
+       count: 40
      }, handleTweets);
 
     })
