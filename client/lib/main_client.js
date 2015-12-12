@@ -41,7 +41,7 @@ Meteor.startup(function(){
           else{
             console.log("no hashtag found! subscribing to #occupy");
             Meteor.subscribe("tweets", "occupy");
-            Session.set("hashtag", occupy);
+            Session.set("hashtag", "occupy");
           }
         });
       });

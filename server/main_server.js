@@ -61,7 +61,7 @@ if (Meteor.isServer) {
    var handleStream = Meteor.bindEnvironment(function(tweet, err){
     console.log("***********************", err, "***********************");
     console.log("+++++++++++++++++++++++",tweet,"+++++++++++++++++++++++");
-    Meteor.call("addTweet", tweet.text, "riseupoctober");
+    Meteor.call("addTweet", tweet.text, "harvardclimate");
   });
 
 
