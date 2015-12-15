@@ -225,3 +225,9 @@ div.outline {
 .gallery{
   margin: 5px;
 }
+
+.easy-modal p{
+  color: #fff;
+  background: #000;
+  text-align: center;
+}

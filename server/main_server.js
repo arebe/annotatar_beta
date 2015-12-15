@@ -7,7 +7,7 @@ if (Meteor.isServer) {
     Tweets.remove({});
 
    //**** hashtags **/
-   Meteor.call("addHashtag", 42.37, -71.12, "harvardclimate");
+   Meteor.call("addHashtag", 42.37, -71.12, "harvardextdgmd");
    Meteor.call("addHashtag", 48.86, 2.37, "cop21");
    Meteor.call("addHashtag", 48.86, 2.38, "cop21");
    Meteor.call("addHashtag", 40.71, -74.01, "ows");
@@ -17,7 +17,7 @@ if (Meteor.isServer) {
    Meteor.call("addHashtag", 40.73, -73.99, "Justice4Jamar");
    Meteor.call("addHashtag", 42.35, -71.06, "occupyboston");
    Meteor.call("addHashtag", 42.35, -71.05, "occupyboston");
-   Meteor.call("addHashtag", 42.4, -71.1, "harvardclimate");
+   //Meteor.call("addHashtag", 42.4, -71.1, "harvardextdgmd");
 
    var hashtagsCursor = Hashtags.find();
    hashtagsCursor.map(function(h){
@@ -61,11 +61,11 @@ if (Meteor.isServer) {
    var handleStream = Meteor.bindEnvironment(function(tweet, err){
     console.log("***********************", err, "***********************");
     console.log("+++++++++++++++++++++++",tweet,"+++++++++++++++++++++++");
-    Meteor.call("addTweet", tweet.text, "harvardclimate");
+    Meteor.call("addTweet", tweet.text, "harvardextdgmd");
   });
 
 
-   var stream = Twit.stream('statuses/filter', { track: "#"+hashtag });
+   var stream = Twit.stream('statuses/filter', { track: "#harvardextdgmd" });
 
     //**************************************************//
     // ******  uncomment to turn the stream on: ****** //
