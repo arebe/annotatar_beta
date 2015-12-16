@@ -111,8 +111,6 @@ var renderTweets = function(){
         context.fillStyle = 'rgba('+data.color.r+','+data.color.g+','+ data.color.b+','+ alpha+')';
         context.fillText(data.text, data.xPos+offset.x, data.yPos+offset.y);
       });
-
-
   $("#hashtag").html("<p>"+Session.get("hashtag")+"</p>");
   //$("#tweetUrl").href("https://twitter.com/home?status=%23"+Session.get("hashtag")+"%20%23annotatAR");
 }; // end renderTweets
