@@ -17,6 +17,8 @@ if (Meteor.isServer) {
    Meteor.call("addHashtag", 40.73, -73.99, "Justice4Jamar");
    Meteor.call("addHashtag", 42.35, -71.06, "occupyboston");
    Meteor.call("addHashtag", 42.35, -71.05, "occupyboston");
+   Meteor.call("addHashtag", 40.74, -73.99, "billionpeoplemarch");
+   Meteor.call("addHashtag", 40.74, -74, "d19");
    //Meteor.call("addHashtag", 42.4, -71.1, "harvardextdgmd");
 
    var hashtagsCursor = Hashtags.find();
